@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "default_locale": "en",
+
+  "name": "hpb-rewards",
+  "description": "An extension to nudge healthier purchases with HPB",
+  "version": "1.0.0",
+
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+
+  "host_permissions": [],
+
+  "content_scripts": [
+    {
+      "js": ["dist/content.js"],
+      "matches": [
+        "https://www.lazada.sg/*",
+        "https://shopee.sg/*",
+        "https://www.fairprice.com.sg/*"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "public/popup.html"
+  },
+
+  "permissions": ["storage", "activeTab"],
+
+  "options_ui": {
+    "page": "public/settings.html",
+    "open_in_tab": true
+  }
+}
