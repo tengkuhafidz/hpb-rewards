@@ -1,4 +1,4 @@
-# REPLACEME
+# HPB Rewards
 
 ## Building and running locally
 
