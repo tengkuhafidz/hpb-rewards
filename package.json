@@ -8,7 +8,8 @@
     "build": "node scripts/build.js",
     "build:prod": "node scripts/prod-build.js",
     "build:chrome": "node scripts/package-extension.js",
-    "build:firefox": "node scripts/firefox-build.js"
+    "build:firefox": "node scripts/firefox-build.js",
+    "build:local": "node scripts/local-build.js"
   },
   "keywords": [],
   "author": "bibocat",

@@ -1,2 +1,7 @@
 node_modules
 dist
+*-packaged-extension
+*-packaged-extension.*
+packaged-extension
+packaged-extension.*
+
