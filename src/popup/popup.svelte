@@ -1,26 +1,39 @@
 <script lang="ts">
-  import { TabContent, TabPane, Card, Button, Container, Row, Col } from '@sveltestrap/sveltestrap';
+  import { Col, Container, Row, TabContent, TabPane } from '@sveltestrap/sveltestrap';
 
-  const merchant = [
-    {name: "Fairprice", logo: "img/fairprice.jpg", url: "https://www.fairprice.com.sg/"},
-    {name: "Shopee", logo: "img/shopee.png", url: "https://shopee.sg/"},
-    {name: "Lazada", logo: "img/lazada.png", url: "https://www.lazada.sg/"},
-    {name: "Sheng Siong", logo: "img/shengsiong.png", url: "https://shengsiong.com.sg/"},
-  ]
+  enum Store {
+    FAIRPRICE = "Fairprice",
+    SHOPEE = "Shopee",
+    LAZADA = "Lazada",
+    SHENGSIONG = "Sheng Siong",
+  }
+  const totalClaimedPts = 100;
+  const totalPendingPts = 200;
+  const data = {
+    [Store.FAIRPRICE]: {logo: "img/fairprice.jpg", url: "https://www.fairprice.com.sg/", claimUrl: "", pendingPts: 0, totalPts: 100},
+    [Store.SHOPEE]: {logo: "img/shopee.png", url: "https://shopee.sg/", claimUrl: "", pendingPts: 10, totalPts: 200},
+    [Store.LAZADA]: {logo: "img/lazada.png", url: "https://www.lazada.sg/", claimUrl: "", pendingPts: 100, totalPts: 100},
+    [Store.SHENGSIONG]: {logo: "img/shengsiong.png", url: "https://shengsiong.com.sg/", claimUrl: "", pendingPts: 0, totalPts: 200},
+  }
+
+  const sortedData = Object.entries(data).sort((a, b) => {
+    return b[1].pendingPts - a[1].pendingPts || b[1].totalPts - a[1].totalPts;
+  });
+
 </script>
 
 <div class="header">
   <img src="img/hpb365.png" alt="logo"/>
-  <h1 class="header-title">HPB 365 Rewards</h1>
+  <h1 class="header-title">Healthy 365</h1>
 </div>
 
 <TabContent>
-  <TabPane tabId="alpha" tab="Stores" active>
+  <TabPane tabId="tab-1" tab="Stores">
     <Container>
-      <Row cols={1}>
-        {#each merchant as { url, logo, name }, i}
+      <Row cols={1}>  
+      {#each Object.entries(data) as [, {url, logo}]}
         <Col>
-          <div class="stores">
+          <div style="margin-top: 10px;">
             <a href={url} target="_blank">
               <img src={logo} alt="logo-store"/>
             </a>
@@ -30,8 +43,23 @@
       </Row>
     </Container>
   </TabPane>
-  <TabPane tabId="bravo" tab="Points">
-    <h1>your rewards</h1>
+  <TabPane tabId="tab-2" tab="Healthpoints" active>
+    <div style="padding: 10px 0; flex-direction: column;">
+      <h5>Total Claimed: {totalClaimedPts} pts</h5>
+      <h5 style="margin-bottom: 0;">Total Pending: {totalPendingPts} pts</h5>
+    </div>
+      {#each sortedData as [, {claimUrl, logo, pendingPts, totalPts}]}
+        <div style="flex-direction: column; border-top: 1px solid #dbdbdb; padding: 15px 0;">
+          <div style="flex: 1; justify-content: space-between; margin-right: 10px;">
+            <img style="height: 50px;" src={logo}  alt="logo-store"/>
+            <a style="align-self: center" href={claimUrl} target="_blank">{pendingPts > 0 ? "claim >" : "view >"}</a>
+          </div>
+          <div style="justify-content: space-between; margin-top: 5px;">
+            <h6 style="align-self: center; margin-bottom: 0">Claimed: {totalPts} pts</h6>
+            <h6 style="align-self: center; margin-bottom: 0">Pending: {pendingPts} pts</h6>
+          </div>
+        </div>
+    {/each}
   </TabPane>
 </TabContent>
 
@@ -41,26 +69,16 @@
     justify-content: left;
   }
 
-  img {
-    margin-right: 10px;
-  }
-
   .header{
     padding: 10px;
     height: 50px;
-    border-bottom: solid 1px grey;
   }
 
-  h1 {
+  .header-title {
     font-size: medium;
     align-self: center;
     margin-bottom: 0;
-  }
-
-  .stores {
-    color: black;
-    text-decoration: none;
-    margin-top: 10px;
+    margin-left: 10px;
   }
 
 </style>
