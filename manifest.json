@@ -1,7 +1,5 @@
 {
   "manifest_version": 3,
-  "default_locale": "en",
-
   "name": "hpb-rewards",
   "description": "An extension to nudge healthier purchases with HPB",
   "version": "1.0.0",
@@ -25,7 +23,8 @@
   ],
 
   "action": {
-    "default_popup": "public/popup.html"
+    "default_popup": "public/popup.html",
+    "default_icon": "public/hpb365.png"
   },
 
   "permissions": ["storage", "activeTab"],
