@@ -11,4 +11,8 @@
     display: flex;
     justify-content: center;
   }
+
+  h1 {
+    color: red;
+  }
 </style>
