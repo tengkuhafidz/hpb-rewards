@@ -19,7 +19,7 @@ const highlightItemsInListingPage = (hcsItems: HcsItem[]) => {
           isHcsItem(element.textContent, item.tokens)
         ) {
           // Highlight the matching item
-          element.style.border = '8px solid #ADD8E6';
+          element.setAttribute("style", "border: #ADD8E6 solid 8px;");
         }
       });
     });
@@ -38,7 +38,7 @@ const highlightItemsInDetailsPage = (hcsItems: HcsItem[]) => {
         isHcsItem(productDetailsElement.textContent, item.tokens)
       ) {
         // Highlight the matching item
-        productDetailsElement.style.border = '8px solid #ADD8E6';
+        productDetailsElement.setAttribute("style", "border: #ADD8E6 solid 8px;");
       }
     });
   }
@@ -55,7 +55,7 @@ const highlightItemsInCartsPage = (hcsItems: HcsItem[]) => {
           isHcsItem(element.textContent, item.tokens)
         ) {
           // Highlight the matching item
-          element.style.border = '8px solid #ADD8E6';
+          element.setAttribute("style", "border: #ADD8E6 solid 8px;");
         }
       });
     });
