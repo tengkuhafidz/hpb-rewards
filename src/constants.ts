@@ -21,7 +21,7 @@ export enum Store {
 }
 
 export enum TabId {
-  SCORE = "tab-score",
+  STORE = "tab-store",
   HEALTHPOINTS = "tab-healthpoints",
   HISTORY = "tab-history"
 }
