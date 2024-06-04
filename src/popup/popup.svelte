@@ -93,18 +93,15 @@
             </Col>
             <Col xs="4" style="align-self: center">
               {#if pendingPts > 0}
-                <a href={claimUrl} target="_blank" style="float: right; margin-right: 10px;">
-                  <Button style="width: 55px; align-self: center;" size="sm" class="position-relative" color="warning">
-                      Claim
-                      <Badge color="danger" pill positioned ariaLabel="Unread messages">{pendingPts}</Badge> 
-                  </Button>
-                </a>
+                <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="warning" on:click={() => setMerchantAndNavigate(key)}>
+                    Claim
+                    <Badge color="danger" pill positioned ariaLabel="Unread messages">{pendingPts}</Badge> 
+                </Button>
               {:else}
-              <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="dark" on:click={() => setMerchantAndNavigate(key)}>
-                View
-              </Button>
+                <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="dark" on:click={() => setMerchantAndNavigate(key)}>
+                 View
+                </Button>
               {/if}
-              
             </Col>
           </Row>
         {/if}
