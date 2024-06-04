@@ -48,8 +48,8 @@
     <div
       style="flex-direction: column; border-top: 1px solid #dbdbdb; padding: 15px 0;"
     >
-      <div>Order Id:{orderId}</div>
-      <div>Points Claimable:{points}</div>
+      <div>Order Id: {orderId}</div>
+      <div>Points Claimable: {points}</div>
       <button on:click={() => handleOnClaimClick(orderId)}>Claim</button>
     </div>
   {/each}
