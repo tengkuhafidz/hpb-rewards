@@ -1,9 +1,15 @@
 import { Store } from "../constants";
 
+export enum MERCHANTS {
+  LAZADA = 'lazada.sg',
+  SHOPEE = 'shopee.sg',
+  FAIRPRICE = 'fairprice.com.sg'
+}
+
 export const merchants = [
   {
     name: 'Fairprice',
-    url: 'https://https://www.fairprice.com.sg'
+    url: 'https://www.fairprice.com.sg'
   },
   {
     name: 'Shopee',
@@ -11,7 +17,7 @@ export const merchants = [
   },
   {
     name: 'Lazada',
-    url: 'https://shopee.sg'
+    url: 'https://www.lazada.sg'
   }
 ];
 
