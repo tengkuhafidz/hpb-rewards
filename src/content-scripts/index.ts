@@ -1,4 +1,5 @@
 import { getHcsItems } from '../utils/hcs';
+// import browser from 'webextension-polyfill';
 import { highlightFairpriceHcsItems } from './fairprice';
 
 export const highlightHcsItems = () => {

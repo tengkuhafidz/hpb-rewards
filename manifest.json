@@ -5,14 +5,18 @@
   "version": "1.0.0",
 
   "background": {
-    "service_worker": "dist/background.js"
+    "service_worker": "dist/background.js",
+    "type": "module"
   },
 
-  "host_permissions": [],
+  "host_permissions": ["<all_urls>"],
 
   "content_scripts": [
     {
-      "js": ["dist/content.js"],
+      "all_frames": true,
+      "js": [
+        "dist/content.js"
+      ],
       "matches": [
         "https://www.lazada.sg/*",
         "https://shopee.sg/*",
@@ -27,7 +31,7 @@
     "default_icon": "public/hpb365.png"
   },
 
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs", "scripting"],
 
   "options_ui": {
     "page": "public/settings.html",
