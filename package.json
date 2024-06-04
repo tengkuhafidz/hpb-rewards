@@ -9,7 +9,8 @@
     "build:prod": "node scripts/prod-build.js",
     "build:chrome": "node scripts/package-extension.js",
     "build:firefox": "node scripts/firefox-build.js",
-    "build:local": "node scripts/local-build.js"
+    "build:local": "node scripts/local-build.js",
+		"watcher": "watch 'npm run build' ./src"
   },
   "keywords": [],
   "author": "bibocat",
@@ -37,6 +38,7 @@
     "@sveltestrap/sveltestrap": "^6.2.7",
     "detect-browser": "^5.3.0",
     "svelte": "^4.2.17",
+    "watch": "^1.0.2",
     "webextension-polyfill": "^0.10.0"
-  }
+	}
 }
