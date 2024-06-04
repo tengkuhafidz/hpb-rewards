@@ -3,8 +3,14 @@ export interface HcsItem {
   tokens: string[];
 }
 
+let hcsItems: HcsItem[] = [];
+
 export const getHcsItems = () => {
-  const hcsItems: HcsItem[] = hcsProductNames.map(item => ({
+  if(hcsItems.length > 0){
+    return hcsItems;
+  }
+
+  hcsItems = hcsProductNames.map(item => ({
     name: item,
     tokens: item.split(' ')
   }));
