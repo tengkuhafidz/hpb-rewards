@@ -37,10 +37,14 @@ export type MerchantPoints = {
 }
 
 export type MerchantData = {
-  [key in Store]: {
+  [key in Store]: MerchantDataObj;
+};
+
+type MerchantDataObj = {
     logo: string;
     url: string;
     pendingPts: number;
     totalPts: number;
-  }
-}
+};
+
+export type DisplayData = [Store, MerchantDataObj][];

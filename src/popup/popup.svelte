@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { Badge, Button, Col, Container, Icon, Row, TabContent, TabPane } from '@sveltestrap/sveltestrap';
-  import HealthpointsIcon from './components/HealthpointsIcon.svelte';import Orders from '../orders/Orders.svelte';
-  import { Store, TabId, type MerchantPoints, type MerchantData } from '../constants';
-  import { saveData } from '../utils/storage';
+  import { Accordion, AccordionItem, Badge, Button, Col, Container, Row, TabContent, TabPane } from '@sveltestrap/sveltestrap';
+  import { onMount } from 'svelte';
+  import { Store, TabId, type MerchantData, type MerchantPoints, type DisplayData } from '../constants';
+  import { merchantClaimUrl } from '../utils/merchants';
+  import { fetchData, saveData } from '../utils/storage';
+  import HealthpointsIcon from './components/HealthpointsIcon.svelte';
 
-  let merchant = Store.FAIRPRICE;
   let activeTab: TabId = TabId.HEALTHPOINTS; // Default active tab
-
-  const merchantData: MerchantData = {
+  let merchantData: MerchantData = {
     [Store.FAIRPRICE]: {logo: "img/fairprice.jpg", url: "https://www.fairprice.com.sg/", pendingPts: 0, totalPts: 0},
     [Store.SHOPEE]: {logo: "img/shopee.png", url: "https://shopee.sg/", pendingPts: 0, totalPts: 0},
     [Store.LAZADA]: {logo: "img/lazada.png", url: "https://www.lazada.sg/", pendingPts: 0, totalPts: 0},
     [Store.SHENGSIONG]: {logo: "img/shengsiong.png", url: "https://shengsiong.com.sg/", pendingPts: 0, totalPts: 0},
   }
-
-  const orders: MerchantPoints = {
+  let data: MerchantPoints;
+  let displayData: DisplayData;
+  
+  const mockData: MerchantPoints = {
     [Store.FAIRPRICE]: [
       {
         orderId: '64278724',
@@ -43,7 +45,7 @@
       }],
     [Store.SHOPEE]: [{
         orderId: '1',
-        points: 100,
+        points: 1000,
         isClaimed: true
       }],
     [Store.SHENGSIONG]: []
@@ -51,11 +53,14 @@
 
   let totalPendingPts = 0;
   let totalClaimedPts = 0;
-
-  Object.entries(merchantData).forEach(([key, details]) => {
+  
+  const generateDisplayData = (data: MerchantPoints) => {
+    Object.entries(data).forEach(([key, details]) => {
+      
     let merchantPendingPts = 0;
     let merchantTotalPts = 0;
-    orders[key as Store].forEach((order) => {
+
+    details.forEach((order) => {
       if(order.isClaimed){
         totalPendingPts += order.points;
         merchantTotalPts += order.points;
@@ -63,26 +68,33 @@
         totalClaimedPts += order.points;
         merchantPendingPts += order.points;
       }
-      details.pendingPts = merchantPendingPts;
-      details.totalPts = merchantTotalPts;
+      merchantData[key as Store].pendingPts = merchantPendingPts;
+      merchantData[key as Store].totalPts = merchantTotalPts;
     })
-    
-  });
-  
-  const sortedData = Object.entries(merchantData).sort((a, b) => {
-    return b[1].pendingPts - a[1].pendingPts || b[1].totalPts - a[1].totalPts;
   });
 
-  function setMerchantAndNavigate(store: string) {
-    merchant = store as Store;
-    activeTab = TabId.HISTORY;
+    displayData = Object.entries(merchantData).sort((a, b) => {
+      return b[1].pendingPts - a[1].pendingPts || b[1].totalPts - a[1].totalPts;
+    }) as DisplayData;
   }
 
-  function setActiveTab(e: CustomEvent) {
-    activeTab = e.detail;
-  };
+  function handleOnClaimClick(orderId: string) {
+    window.open(merchantClaimUrl(Store.FAIRPRICE, orderId));
+  }
 
-  const save = saveData(orders,"userId123");
+  async function loadData() {
+    saveData(mockData,"userId123"); //for testing
+    const response = await fetchData('userId123');
+    // The key is the property
+    data = response["userId123"];
+
+    generateDisplayData(data);
+  }
+
+
+  onMount(() => {
+    loadData();
+  });
 
 </script>
 
@@ -92,12 +104,11 @@
 </div>
 
 {#key activeTab}
-  <TabContent on:tab={setActiveTab} style="font-size: small;">
+  <TabContent>
     <!-- STORE TAB -->
     <TabPane
       tabId={TabId.STORE}
       tab="Stores"
-      active={activeTab === TabId.STORE}
     >
       <div style="padding: 10px 0; flex-direction: column; border-bottom: 1px solid #dbdbdb;">
         <h6 style="margin-bottom: 0;">Participated stores:</h6>
@@ -123,55 +134,72 @@
       tab="Healthpoints"
       active={activeTab === TabId.HEALTHPOINTS}
     >
-      <div style="padding: 10px 0; justify-content: space-around;">
-        <div style="flex-direction: column;">
-          <h6>Total Claimed: </h6>
-          <Badge color="dark">{totalClaimedPts} <HealthpointsIcon size={10}/></Badge>
-        </div>
-        <div style="flex-direction: column;">
-          <h6>Total Pending: </h6>
-          <Badge color="warning">{totalPendingPts} <HealthpointsIcon size={10}/></Badge>
-        </div>
+    <div style="padding: 10px 0; justify-content: space-around;">
+      <div style="flex-direction: column;">
+        <p style="margin-bottom: 5px">Total Claimed: </p>
+        <h6 style="align-self: center;">{totalClaimedPts} <HealthpointsIcon size={10}/></h6>
       </div>
-      {#each sortedData as [key, {logo, pendingPts, totalPts}]}
-        {#if pendingPts > 0 || totalPts > 0}
-          <Row style="border-top: 1px solid #dbdbdb; padding: 15px 0;">
-            <Col xs="4">
-              <img src={logo}  alt="logo-store"/>
-            </Col>
-            <Col xs="4" style="align-self: center">
-              <div style="flex-direction: column; align-self: center; justify-content: start;">
-                <Badge style="margin-bottom: 5px" color="light">Claimed: {totalPts} pts</Badge>
-                <Badge color="light">Pending: {pendingPts} pts</Badge>
-              </div>
-            </Col>
-            <Col xs="4" style="align-self: center">
-              {#if pendingPts > 0}
-                <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="warning" on:click={() => setMerchantAndNavigate(key)}>
-                    Claim
-                    <Badge color="danger" pill positioned ariaLabel="Unread messages">{pendingPts}</Badge> 
-                </Button>
-              {:else}
-                <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="dark" on:click={() => setMerchantAndNavigate(key)}>
-                 View
-                </Button>
+      <div style="flex-direction: column;">
+        <p style="margin-bottom: 5px">Total Pending: </p>
+        <h6 style="align-self: center;">{totalPendingPts} <HealthpointsIcon size={10}/></h6>
+      </div>
+    </div>
+    <Accordion>
+      {#if displayData}
+        {#each displayData as [key, {logo, pendingPts, totalPts}]}
+          {#if pendingPts > 0 || totalPts > 0}
+            <AccordionItem>
+              <Row slot="header">
+                <Col>
+                  <img src={logo}  alt="logo-store"/>
+                </Col>
+                <Col style="align-self: center">
+                  <div style="flex-direction: column; align-self: center; justify-content: start;">
+                    <p style="margin-bottom: 5px; font-size: small;">
+                      Pending
+                      <Badge style="margin-left: 5px;" color={pendingPts > 0 ? "danger" : "light"} pill>
+                        {pendingPts} <HealthpointsIcon size={8} color={pendingPts > 0 ? "white" : "#E51B24"}/>
+                      </Badge>
+                    </p>
+                    <p style="font-size: small; margin-bottom: 0;">
+                      Claimed
+                      <Badge style="margin-left: 5px;" color={totalPts > 0 ? "dark" : "light"} pill>
+                        {totalPts} <HealthpointsIcon size={8} color={totalPts > 0 ? "white" : "#E51B24"}/>
+                      </Badge>
+                    </p>
+                  </div>
+                </Col>
+              </Row>
+              {#if data && data[key]}
+                {#each data[key] as { orderId, points, isClaimed }}
+                  <Row style="border-top: 1px solid #dbdbdb; padding: 15px 0;">
+                    <Col xs="8" style="align-self: center">
+                        <div style="margin-bottom: 0;">
+                          <p style="margin-bottom: 0;">Order ID</p>
+                          <div style="margin-left: 5px; height: fit-content; align-self: center;">
+                            <Badge color="dark">{orderId}</Badge>
+                            {#if isClaimed}
+                              <Badge style="margin-left: 5px;" color="light" pill>Claimed</Badge>
+                            {/if}
+                          </div>
+                        </div>
+                    </Col>
+                    <Col xs="" style="align-self: center">
+                      <Button style="width: 55px; align-self: center; float: right; margin-right: 10px;" size="sm" class="position-relative" color="dark" outline on:click={() => handleOnClaimClick(orderId)}>
+                          {isClaimed ? "View" : "Claim" }
+                          <Badge color={isClaimed ? "dark" : "danger"} pill positioned>{points} <HealthpointsIcon size={8} color="white"/></Badge> 
+                      </Button>
+                    </Col>
+                  </Row>
+                {/each}
               {/if}
-            </Col>
-          </Row>
-        {/if}
-      {/each}
+              
+            </AccordionItem> 
+          {/if}
+        {/each}
+      {/if}
+    </Accordion>
     </TabPane>
-
-    <!-- HISTORY TAB -->
-    {#if totalPendingPts > 0 || totalClaimedPts > 0}
-      <TabPane
-        tabId={TabId.HISTORY}
-        tab="Store History"
-        active={activeTab === TabId.HISTORY}
-      >
-        <Orders {merchant} {merchantData} />
-      </TabPane>
-    {/if}
   </TabContent>
 {/key}
 <style>
