@@ -1,63 +1,67 @@
 import { isHcsItem, type HcsItem } from '../utils/hcs';
+import { generateHcsTagElement, styleBorder } from './utils';
 
 export const highlightFairpriceHcsItems = (hcsItems: HcsItem[]) => {
-  highlightItemsInCartsPage(hcsItems);
-  highlightItemsInDetailsPage(hcsItems);
-  highlightItemsInListingPage(hcsItems);
+  highlightListingItems(hcsItems);
+  // item details page
+  highlightItemsDetails(hcsItems);
+  highlightSuggestedItems(hcsItems);
 };
 
-const highlightItemsInListingPage = (hcsItems: HcsItem[]) => {
-  const listingElements = document.querySelectorAll(
-    '#productCollection > div > div > div > div > a > div'
-  );
-
-  if (listingElements && listingElements.length > 0) {
-    listingElements.forEach(element => {
-      hcsItems.forEach(item => {
-        if (
-          element.textContent &&
-          isHcsItem(element.textContent, item.tokens)
-        ) {
-          // Highlight the matching item
-          element.style.border = '8px solid #ADD8E6';
-        }
-      });
-    });
-  }
+const highlightListingItems = (hcsItems: HcsItem[]) => {
+  injectCardsStyling(hcsItems, 'div.sc-405e7c3c-1', 'div.sc-68f2a4d-0.knzffB');
 };
 
-const highlightItemsInDetailsPage = (hcsItems: HcsItem[]) => {
-  const productDetailsElement = document.querySelector(
+const highlightSuggestedItems = (hcsItems: HcsItem[]) => {
+  injectCardsStyling(hcsItems, 'div.sc-622eddb3-1', 'div.sc-68f2a4d-0');
+};
+
+const highlightItemsDetails = (hcsItems: HcsItem[]) => {
+  const borderElement: HTMLElement | null = document.querySelector(
     '#__next > div > div:nth-child(1) > div.sc-ef6bad94-2.kyvEoN > main > div > div.sc-934106e3-0.fVFcqn > div:nth-child(1)'
   );
 
-  if (productDetailsElement) {
-    hcsItems.forEach(item => {
-      if (
-        productDetailsElement.textContent &&
-        isHcsItem(productDetailsElement.textContent, item.tokens)
-      ) {
-        // Highlight the matching item
-        productDetailsElement.style.border = '8px solid #ADD8E6';
-      }
+  if (borderElement) {
+    injectHcsTag(hcsItems, borderElement, 'span.sc-aa673588-1.drdope');
+  }
+};
+
+// =============================================================================
+// Helpers
+// =============================================================================
+
+const injectCardsStyling = (
+  hcsItems: HcsItem[],
+  borderSelector: string,
+  titleSelector: string
+) => {
+  const listingItemBorderElements: NodeListOf<HTMLElement> =
+    document.querySelectorAll(borderSelector);
+
+  if (listingItemBorderElements && listingItemBorderElements.length > 0) {
+    listingItemBorderElements.forEach(borderElement => {
+      injectHcsTag(hcsItems, borderElement, titleSelector);
     });
   }
 };
 
-const highlightItemsInCartsPage = (hcsItems: HcsItem[]) => {
-  const cartItemElements = document.querySelectorAll('#product-group > div');
-
-  if (cartItemElements && cartItemElements.length > 0) {
-    cartItemElements.forEach(element => {
-      hcsItems.forEach(item => {
-        if (
-          element.textContent &&
-          isHcsItem(element.textContent, item.tokens)
-        ) {
-          // Highlight the matching item
-          element.style.border = '8px solid #ADD8E6';
-        }
-      });
-    });
-  }
+const injectHcsTag = (
+  hcsItems: HcsItem[],
+  borderElement: HTMLElement,
+  titleSelector: string
+) => {
+  hcsItems.forEach(item => {
+    if (
+      borderElement.textContent &&
+      isHcsItem(borderElement.textContent, item.tokens)
+    ) {
+      styleBorder(borderElement);
+      const titleElement: HTMLElement | null =
+        borderElement.querySelector(titleSelector);
+      if (titleElement) {
+        const hcsTagElement = generateHcsTagElement();
+        titleElement.parentNode?.insertBefore(hcsTagElement, titleElement);
+      }
+    }
+  });
 };

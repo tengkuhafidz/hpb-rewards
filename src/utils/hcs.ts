@@ -171,6 +171,7 @@ const hcsProductNames: string[] = [
   'Ayam Brand Brisling Sardines in Extra Virgin Olive Oil',
   'Ayam Brand Brisling Sardines in Sunflower Oil',
   'Ayam Brand Chilli Tuna Light',
+  'Ayam Brand Chili Tuna Light',
   'Ayam Brand Club Sardines in Extra Virgin Olive Oil',
   'Ayam Brand Club Sardines in Extra Virgin Olive Oil & Chilli',
   'Ayam Brand Mackerel in Tomato Sauce',
