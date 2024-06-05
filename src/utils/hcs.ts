@@ -12,9 +12,15 @@ export const getHcsItems = () => {
   return hcsItems;
 };
 
-export const isHcsItem = (itemText: string, hcsItemTokens: string[]) => {
-  return hcsItemTokens.every(token =>
-    itemText.toLowerCase().includes(token.toLowerCase())
+export const isHcsItem = (itemText: string | null) => {
+  if (!itemText) {
+    return false;
+  }
+  const hcsItems = getHcsItems();
+  return hcsItems.some(item =>
+    item.tokens.every(token =>
+      itemText.toLowerCase().includes(token.toLowerCase())
+    )
   );
 };
 
