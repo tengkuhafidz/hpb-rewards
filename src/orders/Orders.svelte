@@ -2,60 +2,49 @@
   import { Store } from '../constants';
   import { onMount } from 'svelte';
   import { merchantClaimUrl } from '../utils/merchants';
+  import { fetchData } from '../utils/storage';
   export let merchant;
-
-  const points = {
-    [Store.FAIRPRICE]: [
-      {
-        orderId: '64278724',
-        points: 10
-      },
-      {
-        orderId: '64278723',
-        points: 5
-      },
-      {
-        orderId: '64278722',
-        points: 5
-      }
-    ],
-    [Store.LAZADA]: [],
-    [Store.SHENGSIONG]: [],
-    [Store.SHOPEE]: []
-  };
+  let data;
 
   function handleOnClaimClick(orderId) {
     window.open(merchantClaimUrl(Store.FAIRPRICE, orderId));
   }
 
-  let merchantPoints;
+  async function loadData() {
+    const response = await fetchData('userId123');
+    // The key is the property
+    data = response["userId123"];
+  }
+
 
   onMount(() => {
-    merchantPoints = points[merchant];
+    loadData();
   });
 </script>
 
-<div>
-  <div class="header">Claimable points for {merchant}</div>
-  <p class="description">
-    Note: You are only able to claim the points when the products are received
-    and marked as delivered or completed.
-  </p>
-</div>
+{#key data}
+  <div>
+    <div class="header">Claimable points for {merchant}</div>
+    <p class="description">
+      Note: You are only able to claim the points when the products are received
+      and marked as delivered or completed.
+    </p>
+  </div>
 
-{#if merchantPoints?.length > 0}
-  {#each merchantPoints as { orderId, points }}
-    <div
-      style="flex-direction: column; border-top: 1px solid #dbdbdb; padding: 15px 0;"
-    >
-      <div>Order Id:{orderId}</div>
-      <div>Points Claimable:{points}</div>
-      <button on:click={() => handleOnClaimClick(orderId)}>Claim</button>
-    </div>
-  {/each}
-{:else}
-  <p>No points available.</p>
-{/if}
+  {#if data && data[merchant]?.length > 0}
+    {#each data[merchant] as { orderId, points }}
+      <div
+        style="flex-direction: column; border-top: 1px solid #dbdbdb; padding: 15px 0;"
+      >
+        <div>Order Id:{orderId}</div>
+        <div>Points Claimable:{points}</div>
+        <button on:click={() => handleOnClaimClick(orderId)}>Claim</button>
+      </div>
+    {/each}
+  {:else}
+    <p>No points available.</p>
+  {/if}
+{/key}
 
 <style>
   .header {
