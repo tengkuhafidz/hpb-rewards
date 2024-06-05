@@ -9,20 +9,20 @@ export const highlightFairpriceHcsItems = () => {
 };
 
 const highlightListingItems = () => {
-  injectCardsStyling('div.sc-405e7c3c-1', 'div.sc-68f2a4d-0.knzffB');
+  injectCardsStyling('[data-testid=product]', '[data-testid=highlighted-promo-label]');
 };
 
 const highlightSuggestedItems = () => {
-  injectCardsStyling('div.sc-622eddb3-1', 'div.sc-68f2a4d-0');
+  injectCardsStyling('[data-testid=compact-product]', 'span > div');
 };
 
 const highlightItemsDetails = () => {
   const borderElement: HTMLElement | null = document.querySelector(
-    '#__next > div > div:nth-child(1) > div.sc-ef6bad94-2.kyvEoN > main > div > div.sc-934106e3-0.fVFcqn > div:nth-child(1)'
+    'main > div > div:nth-child(2) > div:nth-child(1)'
   );
 
   if (borderElement) {
-    injectHcsTag(borderElement, 'span.sc-aa673588-1.drdope');
+    injectHcsTag(borderElement, 'span.drdope');
   }
 };
 
@@ -31,8 +31,7 @@ const highlightItemsDetails = () => {
 // =============================================================================
 
 const injectCardsStyling = (borderSelector: string, titleSelector: string) => {
-  const listingItemBorderElements: NodeListOf<HTMLElement> =
-    document.querySelectorAll(borderSelector);
+  const listingItemBorderElements: NodeListOf<HTMLElement> = document.querySelectorAll(borderSelector);
 
   if (listingItemBorderElements && listingItemBorderElements.length > 0) {
     listingItemBorderElements.forEach(borderElement => {
@@ -46,9 +45,14 @@ const injectHcsTag = (borderElement: HTMLElement, titleSelector: string) => {
     styleBorder(borderElement);
     const titleElement: HTMLElement | null =
       borderElement.querySelector(titleSelector);
-    if (titleElement) {
+    if (titleElement && !isTagExist()) {
       const hcsTagElement = generateHcsTagElement();
       titleElement.parentNode?.insertBefore(hcsTagElement, titleElement);
     }
   }
 };
+
+const isTagExist = () => {
+  const hcsTag: NodeListOf<HTMLElement> = document.querySelectorAll('[id=hcs-tag]');
+  return hcsTag.length > 0;
+}

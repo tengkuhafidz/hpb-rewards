@@ -5,6 +5,7 @@ export const styleBorder = (element: HTMLElement) => {
 
 export const generateHcsTagElement = () => {
   const div = document.createElement('div');
+  div.setAttribute("id", "hcs-tag");
   // Create a span element
   const span = document.createElement('span');
   // Set the styles for the span element
