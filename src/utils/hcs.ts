@@ -18,9 +18,15 @@ export const getHcsItems = () => {
   return hcsItems;
 };
 
-export const isHcsItem = (itemText: string, hcsItemTokens: string[]) => {
-  return hcsItemTokens.every(token =>
-    itemText.toLowerCase().includes(token.toLowerCase())
+export const isHcsItem = (itemText: string | null) => {
+  if (!itemText) {
+    return false;
+  }
+  const hcsItems = getHcsItems();
+  return hcsItems.some(item =>
+    item.tokens.every(token =>
+      itemText.toLowerCase().includes(token.toLowerCase())
+    )
   );
 };
 
@@ -177,6 +183,7 @@ const hcsProductNames: string[] = [
   'Ayam Brand Brisling Sardines in Extra Virgin Olive Oil',
   'Ayam Brand Brisling Sardines in Sunflower Oil',
   'Ayam Brand Chilli Tuna Light',
+  'Ayam Brand Chili Tuna Light',
   'Ayam Brand Club Sardines in Extra Virgin Olive Oil',
   'Ayam Brand Club Sardines in Extra Virgin Olive Oil & Chilli',
   'Ayam Brand Mackerel in Tomato Sauce',

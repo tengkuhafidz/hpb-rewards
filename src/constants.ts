@@ -25,3 +25,13 @@ export enum TabId {
   HEALTHPOINTS = "tab-healthpoints",
   HISTORY = "tab-history"
 }
+
+export interface Points {
+  orderId:string;
+  isClaimed:boolean;
+  points:number;
+}
+
+export type MerchantPoints = {
+  [key in Store]:Points[]
+}

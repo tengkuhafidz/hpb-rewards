@@ -1,7 +1,8 @@
 <script lang="ts">
   import { Badge, Button, Col, Container, Icon, Row, TabContent, TabPane } from '@sveltestrap/sveltestrap';
   import HealthpointsIcon from './components/HealthpointsIcon.svelte';import Orders from '../orders/Orders.svelte';
-  import { Store, TabId } from '../constants';
+  import { Store, TabId, type MerchantPoints } from '../constants';
+  import { saveData } from '../utils/storage';
 
   let merchant = Store.FAIRPRICE;
   let activeTab: TabId = TabId.HEALTHPOINTS; // Default active tab
@@ -33,6 +34,36 @@
   function setActiveTab(e: CustomEvent) {
     activeTab = e.detail;
   }
+
+  const points:MerchantPoints = {
+    [Store.FAIRPRICE]: [
+      {
+        orderId: '64278724',
+        points: 10,
+        isClaimed:false
+      },
+      {
+        orderId: '64278723',
+        points: 5,
+        isClaimed:false
+      },
+      {
+        orderId: '64278722',
+        points: 5,
+        isClaimed:false
+      }
+    ],
+    [Store.LAZADA]: [{
+        orderId: '1',
+        points: 10,
+        isClaimed:false
+      }],
+    [Store.SHENGSIONG]: [],
+    [Store.SHOPEE]: []
+  };
+
+  const save = saveData(points,"userId123");
+
 </script>
 
 <div class="header">
