@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "hpb-rewards",
-  "description": "An extension to nudge healthier purchases with HPB",
+  "name": "healthier-choice",
+  "description": "Nudging users toward healthier choice options via HPB rewards",
   "version": "1.0.0",
 
   "background": {
