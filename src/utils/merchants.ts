@@ -3,7 +3,8 @@ import { Store } from "../constants";
 export enum MERCHANTS {
   LAZADA = 'lazada.sg',
   SHOPEE = 'shopee.sg',
-  FAIRPRICE = 'fairprice.com.sg'
+  FAIRPRICE = 'fairprice.com.sg',
+  SHENGSIONG = 'shengsiong.com.sg'
 }
 
 export const merchants = [
