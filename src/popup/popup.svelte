@@ -72,11 +72,6 @@
     ],
     [Store.LAZADA]: [
       {
-        orderId: '1342',
-        points: 10,
-        isClaimed: false
-      },
-      {
         orderId: '2342',
         points: 10,
         isClaimed: true
