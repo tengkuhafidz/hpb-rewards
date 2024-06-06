@@ -1,14 +1,16 @@
 import { isHcsItem } from '../utils/hcs';
 
-export const observer = new MutationObserver((_mutations) => {
-  const originalPlaceOrderButton = document.querySelector('#floating-area-place-order div button');
+export const observer = new MutationObserver(_mutations => {
+  const originalPlaceOrderButton = document.querySelector(
+    '#floating-area-place-order div button'
+  );
 
   if (!originalPlaceOrderButton) {
     return;
   }
 
   const placeOrderButton = document.createElement('button');
-  placeOrderButton.className = originalPlaceOrderButton?.className ?? ""; // steal the original CSS
+  placeOrderButton.className = originalPlaceOrderButton?.className ?? ''; // steal the original CSS
   placeOrderButton.innerText = 'Place Order Spy';
   placeOrderButton.addEventListener('click', () => {
     showConfirmationModal();
@@ -21,31 +23,35 @@ export const observer = new MutationObserver((_mutations) => {
 export const showConfirmationModal = () => {
   removeModalIfExists();
 
-  const products: { productName: string, quantity: string }[] = [];
-  const elements = document.querySelectorAll("#product-group div[data-testid=cartProduct]");
+  const products: { productName: string; quantity: string }[] = [];
+  const elements = document.querySelectorAll(
+    '#product-group div[data-testid=cartProduct]'
+  );
 
   elements.forEach(element => {
-      if (
-        isHcsItem(element.textContent)
-      ) {
-        const productName = element.querySelector("a[data-testid=cart-product-detail-link] > div > div > span > span:last-child")?.textContent ?? "";
-        const quantity = element.querySelector("input")?.value ?? "1";
-        products.push({
-          productName,
-          quantity
-        });
-      }
+    if (isHcsItem(element.textContent)) {
+      const productName =
+        element.querySelector(
+          'a[data-testid=cart-product-detail-link] > div > div > span > span:last-child'
+        )?.textContent ?? '';
+      const quantity = element.querySelector('input')?.value ?? '1';
+      products.push({
+        productName,
+        quantity
+      });
+    }
   });
 
-  if(products.length === 0) {
+  if (products.length === 0) {
     return;
   }
 
-  const modal = document.createElement("dialog");
-  modal.id = "hpbRewardsConfirmationModal";
+  const modal = document.createElement('dialog');
+  modal.id = 'hpbRewardsConfirmationModal';
 
   modal.setAttribute(
-    "style",`
+    'style',
+    `
 padding: 32px;
 border: none;
 max-width: 350px;
@@ -65,42 +71,47 @@ box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
 `;
 
   let totalQuantity = 0;
-  const contentDom = modal.querySelector("#confirmationModalContent");
+  const contentDom = modal.querySelector('#confirmationModalContent');
 
-  if(!contentDom) {
+  if (!contentDom) {
     return;
   }
 
-  products.forEach((product) => {
-    const itemDiv = document.createElement("div");
-    itemDiv.setAttribute("style", `
+  products.forEach(product => {
+    const itemDiv = document.createElement('div');
+    itemDiv.setAttribute(
+      'style',
+      `
     display: flex;
     border: 1px solid #000;
     padding: 16px;
-    `);
+    `
+    );
 
     itemDiv.innerText = `${product.productName} – ${product.quantity}`;
-    contentDom.append(itemDiv)
+    contentDom.append(itemDiv);
 
     totalQuantity += +product.quantity;
-  })
+  });
 
-  const totalPointDiv = document.createElement("div");
+  const totalPointDiv = document.createElement('div');
 
-  totalPointDiv.innerHTML = `Total points: <span style="font-size: 20px;">${totalQuantity * 5}</span>`;
+  totalPointDiv.innerHTML = `Total points: <span style="font-size: 20px;">${
+    totalQuantity * 5
+  }</span>`;
   contentDom.append(totalPointDiv);
 
   document.body.appendChild(modal);
 
   modal.show();
-  modal.querySelector("button")?.addEventListener("click", () => {
+  modal.querySelector('button')?.addEventListener('click', () => {
     modal.close();
   });
 };
 
 export const removeModalIfExists = () => {
-  const modal = document.querySelector("#hpbRewardsConfirmationModal");
-  if(!!modal) {
+  const modal = document.querySelector('#hpbRewardsConfirmationModal');
+  if (!!modal) {
     modal.remove();
   }
-}
+};

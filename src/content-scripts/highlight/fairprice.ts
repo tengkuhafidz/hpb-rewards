@@ -34,10 +34,11 @@ const highlightItemsDetails = () => {
 
   if (borderElement && isHcsItem(borderElement.textContent)) {
     styleBorder(borderElement);
-    const titleElement = 'span.drdope';
-    injectHcsTag(borderElement, titleElement);
-    const addToCartButtonElement = 'div.sc-934106e3-13';
-    injectRewardBox(borderElement, addToCartButtonElement);
+    const titleElementSelector = 'span.drdope';
+    injectHcsTag(borderElement, titleElementSelector);
+    const addToCartButtonElementSelector =
+      'div#hcs-border > div:last-of-type > div:last-of-type > div:last-of-type';
+    injectRewardBox(borderElement, addToCartButtonElementSelector);
   }
 };
 
@@ -53,19 +54,14 @@ const injectCardsStyling = (borderSelector: string, titleSelector: string) => {
     listingItemBorderElements.forEach(borderElement => {
       if (isHcsItem(borderElement.textContent)) {
         styleBorder(borderElement);
-        injectElement(
-          borderElement,
-          titleSelector,
-          generateHcsTagElement(),
-          'beforebegin'
-        );
+        injectHcsTag(borderElement, titleSelector);
       }
     });
   }
 };
 
 const injectHcsTag = (borderElement: HTMLElement, titleSelector: string) => {
-  if (hasInjectedElement('[id=hcs-tag]')) {
+  if (hasInjectedElement('[id=hcs-tag]', borderElement)) {
     return;
   }
   injectElement(
@@ -135,13 +131,14 @@ const highlightCartItemsAndInjectTotalPoints = () => {
       );
     }
 
-    const listingItemElements: NodeListOf<HTMLElement> =
-      document.querySelectorAll('[data-testid=cartProduct]');
+    const cartItemElements: NodeListOf<HTMLElement> = document.querySelectorAll(
+      '[data-testid=cartProduct]'
+    );
 
-    if (listingItemElements && listingItemElements.length > 0) {
-      listingItemElements.forEach(itemElement => {
+    if (cartItemElements && cartItemElements.length > 0) {
+      cartItemElements.forEach(itemElement => {
         if (isHcsItem(itemElement.textContent)) {
-          injectCartItemRewardInfo(itemElement, 'div.sc-b47619a4-6.jsRERq');
+          injectCartItemRewardInfo(itemElement, 'div > div:nth-child(1)');
         }
       });
     }
@@ -178,8 +175,6 @@ const isCartPageReady = () => {
 };
 
 const hasInjectedElement = (selector: string, parentElement?: HTMLElement) => {
-  const injectedElements = (parentElement ?? document).querySelectorAll(
-    selector
-  );
-  return injectedElements && injectedElements.length > 0;
+  const injectedElements = (parentElement ?? document).querySelector(selector);
+  return injectedElements;
 };

@@ -1,5 +1,6 @@
 const borderColor = '#f29677';
 export const styleBorder = (element: HTMLElement) => {
+  element.setAttribute('id', 'hcs-border');
   element.style.border = `2px solid ${borderColor}`;
 };
 
@@ -43,7 +44,6 @@ export const generateHpbRewardBoxElement = () => {
   rewardContainer.style.display = 'inline-flex';
   rewardContainer.style.justifyContent = 'space-between';
   rewardContainer.style.alignItems = 'center';
-  rewardContainer.style.marginTop = '10px'; // Adjust this as needed
   rewardContainer.style.borderRadius = '4px'; // Adjust this as needed
   rewardContainer.style.padding = '10px 20px';
   rewardContainer.style.border = `1px solid #666`; // Optionally add a border
