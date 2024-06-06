@@ -17,11 +17,6 @@ export const processFairPriceClaim = async (currPage: string) => {
     return;
   }
 
-  if (!completedElementExist) {
-    alert('The order is still being process...cannot be claimed');
-    return;
-  }
-
   const response = await fetchData('userId123');
   const data: MerchantPoints = response['userId123'];
 
@@ -32,6 +27,10 @@ export const processFairPriceClaim = async (currPage: string) => {
     );
 
     if (currentOrderIndex >= 0) {
+      if (!completedElementExist) {
+        alert('The order is still being process...cannot be claimed');
+        return;
+      }
       const currentOrder = fairPriceOrders[currentOrderIndex];
       if (currentOrder.isClaimed) {
         alert(`This ${orderId} id is already claimed!`);
