@@ -177,7 +177,7 @@ box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
   modal.innerHTML = `
 <button style="position: absolute; top: 0; right: 5px; padding: 8px 12px; font-size: 16px; border: none; border-radius: 20px; cursor: pointer">x</button>
 <h1 style="padding: 0px; margin: 0; text-align: center; font-weight: bold; font-size: 40px;"><img src="https://media.publit.io/file/randomassets/hcs.png" style="height: 36px; margin-right: 8px;"/>${totalPoints}pts</h1>
-<p style="text-align: center; margin: 12px 0;">Healthier Choice points to be claimed upon order confirmation</p>
+<p style="text-align: center; margin: 12px 0;">HPB Healthier Choice points to be claimed upon order confirmation</p>
 <hr />
 <div id="confirmationModalContent" style="display: flex; gap: 8px; flex-direction: column; margin-top:12px; text-align: center"></div>
 `;

@@ -227,7 +227,7 @@ const hcsProductNames: string[] = [
   'Berrylicious Korean Kyoho Grapes',
   'Best One Burger Bun',
   'Best One Hot Dog Roll',
-  'Best One Sausage Bun (Healthier Choice)',
+  'Best One Sausage Bun',
   'Betagen Light Cultured Milk Drink Lactose Free',
   'Bhutan Natural Bhutan Red Rice',
   "BibiK's Choice Chicken Patties (Breaded) -Reduced Salt",

@@ -128,8 +128,7 @@
   <h1
     style="font-size: medium; align-self: center; margin-bottom: 0; margin-left: 10px;"
   >
-  
-    Healthier Choice
+    HPB Healthier Choice
   </h1>
 </div>
 
