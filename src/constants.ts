@@ -23,7 +23,8 @@ export enum Store {
 export enum TabId {
   STORE = "tab-store",
   HEALTHPOINTS = "tab-healthpoints",
-  HISTORY = "tab-history"
+  HISTORY = "tab-history",
+  DEVMENU = "tab-devmenu"
 }
 
 export interface Points {

@@ -101,6 +101,11 @@
     window.open(url);
   }
 
+  function resetStorage() {
+    alert('Demo Reset');
+    saveData(mockData, 'userId123');
+  }
+
   async function loadData() {
     const response = await fetchData('userId123');
     // The key is the property
@@ -138,7 +143,7 @@
       </div>
       <Container>
         <Row cols={1}>
-          {#each Object.entries(merchantData) as [ { url, logo }]}
+          {#each Object.entries(merchantData) as [{ url, logo }]}
             <Col>
               <div style="margin-top: 10px;">
                 <a href={url} target="_blank">
@@ -268,6 +273,21 @@
           {/each}
         {/if}
       </Accordion>
+    </TabPane>
+
+    <TabPane
+      tabId={TabId.DEVMENU}
+      tab="Menu"
+      active={activeTab === TabId.DEVMENU}
+    >
+      <Button
+        style="width: 100%; align-self: center;"
+        size="sm"
+        class="position-relative"
+        color="dark"
+        outline
+        on:click={() => resetStorage()}>RESET</Button
+      >
     </TabPane>
   </TabContent>
 {/key}
