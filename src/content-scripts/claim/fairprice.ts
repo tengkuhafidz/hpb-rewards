@@ -25,6 +25,7 @@ export const processFairPriceClaim = async (currPage: string) => {
   }
 
   if (orderCancelElementExist) {
+    alert(`Order has been cancelled, points will not be rewarded`);
     return;
   }
 

@@ -60,30 +60,13 @@
         isClaimed: false
       },
       {
-        orderId: '64278723',
-        points: 5,
-        isClaimed: false
-      },
-      {
-        orderId: '64278722',
+        orderId: '179995252',
         points: 5,
         isClaimed: false
       }
     ],
-    [Store.LAZADA]: [
-      {
-        orderId: '2342',
-        points: 10,
-        isClaimed: true
-      }
-    ],
-    [Store.SHENGSIONG]: [
-      {
-        orderId: '16423',
-        points: 1000,
-        isClaimed: true
-      }
-    ],
+    [Store.LAZADA]: [],
+    [Store.SHENGSIONG]: [],
     [Store.SHOPEE]: []
   };
 
@@ -123,8 +106,8 @@
     // The key is the property
     data = response['userId123'] || mockData;
 
-    if(!data){
-      await saveData(mockData, 'userId123'); //for testing
+    if (!data) {
+      saveData(mockData, 'userId123'); //for testing
     }
 
     generateDisplayData(data);
@@ -155,7 +138,7 @@
       </div>
       <Container>
         <Row cols={1}>
-          {#each Object.entries(merchantData) as [, { url, logo }]}
+          {#each Object.entries(merchantData) as [ { url, logo }]}
             <Col>
               <div style="margin-top: 10px;">
                 <a href={url} target="_blank">
