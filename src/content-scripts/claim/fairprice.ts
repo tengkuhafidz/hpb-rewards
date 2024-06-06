@@ -1,4 +1,5 @@
 import { MerchantPoints, Store } from '../../constants';
+import { merchantClaimUrl } from '../../utils/merchants';
 import { fetchData, saveData } from '../../utils/storage';
 
 export const processFairPriceClaim = async (currPage: string) => {

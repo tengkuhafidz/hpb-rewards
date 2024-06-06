@@ -8,15 +8,13 @@ import { processFairPriceClaim } from './content-scripts/claim/fairprice';
 observer.observe(document, { childList: true, subtree: true });
 
 browser.runtime.onMessage.addListener(async (obj, sender, response) => {
-  const { type,currPage } = obj;
+  const { type, currPage } = obj;
 
-  
-	
-	// TODO: add support for other merchants
-	switch (type) {
-		case MERCHANTS.FAIRPRICE:
+  // TODO: add support for other merchants
+  switch (type) {
+    case MERCHANTS.FAIRPRICE:
       await processFairPriceClaim(currPage);
-			highlightFairpriceHcsItems();
-			break;
-	}
+      highlightFairpriceHcsItems();
+      break;
+  }
 });
