@@ -12,8 +12,23 @@ export const processFairPriceClaim = async (currPage: string) => {
     document.documentElement.innerText.indexOf(fairPriceOrderIdSelector) > -1;
   const completedElementExist =
     document.documentElement.innerText.indexOf('Order delivered!') > -1;
+  const orderCancelElementExist =
+    document.documentElement.innerText.indexOf('Order cancelled') > -1;
+
+  if (!currPage.includes(merchantClaimUrl(Store.FAIRPRICE, orderId))) {
+    return;
+  }
 
   if (!orderIdElementExist) {
+    return;
+  }
+
+  if (orderCancelElementExist) {
+    return;
+  }
+
+  if (!completedElementExist) {
+    alert('The order is still being process...cannot be claimed');
     return;
   }
 
@@ -27,10 +42,6 @@ export const processFairPriceClaim = async (currPage: string) => {
     );
 
     if (currentOrderIndex >= 0) {
-      if (!completedElementExist) {
-        alert('The order is still being process...cannot be claimed');
-        return;
-      }
       const currentOrder = fairPriceOrders[currentOrderIndex];
       if (currentOrder.isClaimed) {
         alert(`This ${orderId} id is already claimed!`);
