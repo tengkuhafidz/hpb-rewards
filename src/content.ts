@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { highlightFairpriceHcsItems } from './content-scripts/fairprice';
+import { highlightFairpriceHcsItems } from './content-scripts/highlight/fairprice';
 import { MERCHANTS } from './utils/merchants';
 
 browser.runtime.onMessage.addListener(async (obj, sender, response) => {
