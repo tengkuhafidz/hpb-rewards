@@ -237,21 +237,19 @@
                     <Row
                       style="border-top: 1px solid #dbdbdb; padding: 15px 0;"
                     >
-                      <Col xs="8" style="align-self: center">
-                        <div style="margin-bottom: 0;">
-                          <p style="margin-bottom: 0; font-size: small;">Order ID</p>
-                          <div
-                            style="margin-left: 5px; height: fit-content; align-self: center;"
-                          >
+                      <Col xs="8" style="align-self: center;">
+                        <div>
+                          <div style="flex-direction: column; align-items: center;">
+                            <p style="margin-bottom: 0; font-size: small;">Order ID</p>
                             <Badge color="dark">{orderId}</Badge>
-                            {#if isClaimed}
-                              <Badge
-                                style="margin-left: 5px;"
-                                color="light"
-                                pill>Claimed</Badge
-                              >
-                            {/if}
                           </div>
+                          {#if isClaimed}
+                            <Badge
+                              style="margin-left: 5px; align-self: center;"
+                              color="light"
+                              pill>Claimed</Badge
+                            >
+                          {/if}
                         </div>
                       </Col>
                       <Col xs="" style="align-self: center">
