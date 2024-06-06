@@ -1,4 +1,4 @@
-import { Store } from '../constants';
+import { type MerchantPoints, Store } from '../constants';
 import { isHcsItem } from '../utils/hcs';
 import { MERCHANTS } from '../utils/merchants';
 import { fetchData, saveData } from '../utils/storage';
@@ -81,10 +81,34 @@ export const saveRewardsPointToStorage = async () => {
   // hardcode the orderId here, will need to have a function to get orderId for each type of Store
   const orderId = '64278725' || currentUrl.split('/').pop();
   const userId = 'userId123'; // hardcoding user id for demo
+  let totalQuantity = 0;
+  products.forEach((product) => {
+    totalQuantity += +product.quantity;
+  });
 
   // hardcoding userId
   const existingData = await fetchData(userId);
   const existingUserMerchantPoints = existingData[userId];
+
+  if(!existingUserMerchantPoints) {
+    // create store for new user
+    const emptyState: MerchantPoints = {
+      [Store.FAIRPRICE]: [],
+      [Store.LAZADA]: [],
+      [Store.SHENGSIONG]: [],
+      [Store.SHOPEE]: []
+    }
+
+    const data = {
+      ...emptyState,
+      [currentStore]: [{ orderId, isClaimed: false, points: totalQuantity * 5 }]
+    };
+    await saveData(data, userId);
+
+    showConfirmationModal();
+    return;
+  }
+
   const existingStorePointsForTheUser = existingUserMerchantPoints[currentStore];
 
   // find if orderId already exist
@@ -97,11 +121,6 @@ export const saveRewardsPointToStorage = async () => {
     console.log('Current order has already been tracked.', existingStorePointsForTheUser[existingTrackingForOrderId]);
     return;
   }
-
-  let totalQuantity = 0;
-  products.forEach((product) => {
-    totalQuantity += +product.quantity;
-  });
 
   await saveData({
     ...existingUserMerchantPoints,
