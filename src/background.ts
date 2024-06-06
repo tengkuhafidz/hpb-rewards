@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import { removeModalIfExists } from './content-scripts/confirmation-modal';
 import { MERCHANTS } from './utils/merchants';
 
 console.log('background script running...');
@@ -27,6 +26,17 @@ browser.runtime.onInstalled.addListener(async () => {
 });
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // remove confirmation modal if user navigate else where
+  browser.scripting.executeScript({
+    target: { tabId },
+    func: () => {
+      const modal = document.querySelector("#hpbRewardsConfirmationModal");
+      if(!!modal) {
+        modal.remove();
+      }
+    }
+  });
+
   if (!tab.url && changeInfo.status !== 'complete') {
     return;
   }
@@ -50,12 +60,6 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
       currPage
     });
   }
-
-  // remove confirmation modal if user navigate else where
-  browser.scripting.executeScript({
-    target: { tabId },
-    func: removeModalIfExists
-  });
 });
 
 browser.storage.onChanged.addListener((changes, namespace) => {

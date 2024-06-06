@@ -28,9 +28,6 @@ export const showConfirmationModal = () => {
       if (
         isHcsItem(element.textContent)
       ) {
-        // Highlight the matching item
-        element.setAttribute("style", "border: #ADD8E6 solid 8px;");
-
         const productName = element.querySelector("a[data-testid=cart-product-detail-link] > div > div > span > span:last-child")?.textContent ?? "";
         const quantity = element.querySelector("input")?.value ?? "1";
         products.push({
@@ -39,8 +36,6 @@ export const showConfirmationModal = () => {
         });
       }
   });
-
-  console.log("products: ", products);
 
   if(products.length === 0) {
     return;
@@ -53,6 +48,8 @@ export const showConfirmationModal = () => {
     "style",`
 padding: 32px;
 border: none;
+max-width: 350px;
+width: 100%; 
 top: 16px;
 margin-right: 16px;
 border-radius: 20px;
@@ -64,7 +61,6 @@ box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
 
   modal.innerHTML = `
 <button style="position: absolute; top: 0; right: 5px; padding: 8px 12px; font-size: 16px; border: none; border-radius: 20px; cursor: pointer">x</button>
-<div style="margin-bottom: 16px;">Thanks for making purchase for healthier choices! Here is the summary of the points that you're earning after the purchase is completed:</div>
 <div id="confirmationModalContent" style="display: flex; gap: 16px; flex-direction: column;"></div>
 `;
 
@@ -90,7 +86,8 @@ box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
   })
 
   const totalPointDiv = document.createElement("div");
-  totalPointDiv.innerText = `Total points: ${totalQuantity * 5}`;
+
+  totalPointDiv.innerHTML = `Total points: <span style="font-size: 20px;">${totalQuantity * 5}</span>`;
   contentDom.append(totalPointDiv);
 
   document.body.appendChild(modal);
