@@ -72,24 +72,21 @@
     ],
     [Store.LAZADA]: [
       {
-        orderId: '1',
+        orderId: '1342',
         points: 10,
         isClaimed: false
       },
       {
-        orderId: '2',
+        orderId: '2342',
         points: 10,
         isClaimed: true
-      }
-    ],
-    [Store.SHOPEE]: [
-      {
-        orderId: '1',
+      }],
+    [Store.SHENGSIONG]: [{
+        orderId: '16423',
         points: 1000,
         isClaimed: true
-      }
-    ],
-    [Store.SHENGSIONG]: []
+      }],
+    [Store.SHOPEE]: []
   };
 
   let totalPendingPts = 0;
@@ -100,18 +97,18 @@
       let merchantPendingPts = 0;
       let merchantTotalPts = 0;
 
-      details.forEach(order => {
-        if (order.isClaimed) {
-          totalPendingPts += order.points;
-          merchantTotalPts += order.points;
-        } else {
-          totalClaimedPts += order.points;
-          merchantPendingPts += order.points;
-        }
-        merchantData[key as Store].pendingPts = merchantPendingPts;
-        merchantData[key as Store].totalPts = merchantTotalPts;
-      });
-    });
+    details.forEach((order) => {
+      if(order.isClaimed){
+        totalClaimedPts += order.points;
+        merchantTotalPts += order.points;
+      } else {
+        totalPendingPts += order.points;
+        merchantPendingPts += order.points;
+      }
+      merchantData[key as Store].pendingPts = merchantPendingPts;
+      merchantData[key as Store].totalPts = merchantTotalPts;
+    })
+  });
 
     displayData = Object.entries(merchantData).sort((a, b) => {
       return b[1].pendingPts - a[1].pendingPts || b[1].totalPts - a[1].totalPts;
@@ -242,7 +239,7 @@
                     >
                       <Col xs="8" style="align-self: center">
                         <div style="margin-bottom: 0;">
-                          <p style="margin-bottom: 0;">Order ID</p>
+                          <p style="margin-bottom: 0; font-size: small;">Order ID</p>
                           <div
                             style="margin-left: 5px; height: fit-content; align-self: center;"
                           >
