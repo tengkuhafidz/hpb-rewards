@@ -92,15 +92,15 @@ const injectRewardBox = (
 };
 
 const injectCartItemRewardInfo = (
-  borderElement: HTMLElement,
-  buttonDivSelector: string
+  cartItemElement: HTMLElement,
+  refSelector: string
 ) => {
-  if (hasInjectedElement('[id=hpb-reward-box]', borderElement)) {
+  if (hasInjectedElement('[id=hpb-reward-info-cart]', cartItemElement)) {
     return;
   }
   injectElement(
-    borderElement,
-    buttonDivSelector,
+    cartItemElement,
+    refSelector,
     generateCartItemRewardInElement(),
     'afterend'
   );
@@ -135,13 +135,13 @@ const highlightCartItemsAndInjectTotalPoints = () => {
       );
     }
 
-    const listingItemBorderElements: NodeListOf<HTMLElement> =
-      document.querySelectorAll('div.sc-804aad7c-0.QdzdE');
+    const listingItemElements: NodeListOf<HTMLElement> =
+      document.querySelectorAll('[data-testid=cartProduct]');
 
-    if (listingItemBorderElements && listingItemBorderElements.length > 0) {
-      listingItemBorderElements.forEach(borderElement => {
-        if (isHcsItem(borderElement.textContent)) {
-          injectCartItemRewardInfo(borderElement, 'div.sc-b47619a4-6.jsRERq');
+    if (listingItemElements && listingItemElements.length > 0) {
+      listingItemElements.forEach(itemElement => {
+        if (isHcsItem(itemElement.textContent)) {
+          injectCartItemRewardInfo(itemElement, 'div.sc-b47619a4-6.jsRERq');
         }
       });
     }
