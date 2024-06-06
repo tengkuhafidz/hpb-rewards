@@ -105,3 +105,30 @@ export const generateTotalHpbRewardTextElement = () => {
   container.appendChild(rewardContainer);
   return container;
 };
+
+// =============================================================================
+// HPB Reward Cart Info
+// =============================================================================
+
+export const generateCartItemRewardInElement = () => {
+  const container = document.createElement('div');
+  container.setAttribute('id', 'hpb-reward-info-cart');
+
+  // Create the reward container
+  const rewardInfoContainer = document.createElement('div');
+  rewardInfoContainer.style.display = 'inline';
+  rewardInfoContainer.style.padding = '0 8px 2px 8px';
+  rewardInfoContainer.style.border = `1px solid ${borderColor}`;
+  rewardInfoContainer.style.borderRadius = '2px';
+
+  // Create the reward text
+  const rewardinfoText = document.createElement('span');
+  rewardinfoText.textContent = ' ♥ 5 HPB points per quantity ';
+  rewardinfoText.style.fontSize = '12px'; // Adjust the text size as needed
+  rewardinfoText.style.color = '#ee1c24';
+
+  // Append logo and text to the container
+  rewardInfoContainer.appendChild(rewardinfoText);
+  container.appendChild(rewardInfoContainer);
+  return container;
+};
