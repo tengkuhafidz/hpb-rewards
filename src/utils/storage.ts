@@ -1,11 +1,12 @@
 import browser from 'webextension-polyfill';
+import type { MerchantPoints } from '../constants';
 
-export const saveData = (data:Record<string,any>,key:string) =>{
-    browser.storage.sync.set({
-        [key]:data
-    });
-}
+export const saveData = async (data: MerchantPoints, key: string) => {
+  await browser.storage.sync.set({
+    [key]: data
+  });
+};
 
-export const fetchData = (key:String) => {
-    return browser.storage.sync.get(key);
-}
+export const fetchData = async (key: String): Promise<Record<string, MerchantPoints>> => {
+  return browser.storage.sync.get(key);
+};

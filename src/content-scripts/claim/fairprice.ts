@@ -1,4 +1,4 @@
-import { MerchantPoints, Store } from '../../constants';
+import { Store } from '../../constants';
 import { merchantClaimUrl } from '../../utils/merchants';
 import { fetchData, saveData } from '../../utils/storage';
 
@@ -6,7 +6,7 @@ export const processFairPriceClaim = async (currPage: string) => {
   const values = currPage.split('/');
   const orderId = values[values.length - 1];
 
-  const fairPriceOrderIdSelector = `Delivery ID: ORD${orderId}`;
+  const fairPriceOrderIdSelector = `Delivery ID: ORD${ orderId }`;
 
   const orderIdElementExist =
     document.documentElement.textContent ||
@@ -34,7 +34,7 @@ export const processFairPriceClaim = async (currPage: string) => {
   }
 
   const response = await fetchData('userId123');
-  const data: MerchantPoints = response['userId123'];
+  const data = response['userId123'];
 
   if (data) {
     const fairPriceOrders = data[Store.FAIRPRICE];
@@ -45,15 +45,15 @@ export const processFairPriceClaim = async (currPage: string) => {
     if (currentOrderIndex >= 0) {
       const currentOrder = fairPriceOrders[currentOrderIndex];
       if (currentOrder.isClaimed) {
-        alert(`This ${orderId} id is already claimed!`);
+        alert(`This ${ orderId } id is already claimed!`);
       } else {
         fairPriceOrders[currentOrderIndex] = {
           ...currentOrder,
           isClaimed: true
         };
 
-        saveData(data, 'userId123');
-        alert(`You have claimed ${currentOrder.points} HDB Points`);
+        await saveData(data, 'userId123');
+        alert(`You have claimed ${ currentOrder.points } HDB Points`);
       }
     }
   }
