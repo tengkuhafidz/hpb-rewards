@@ -15,7 +15,7 @@ export const observer = new MutationObserver(_mutations => {
 
   const placeOrderButton = document.createElement('button');
   placeOrderButton.className = originalPlaceOrderButton?.className ?? ''; // steal the original CSS
-  placeOrderButton.innerText = 'Place Order (FAKE)';
+  placeOrderButton.innerText = 'Place Order [⚠️ FAKE ⚠️]';
   placeOrderButton.addEventListener('click', () => {
     void saveRewardsPointToStorage();
   });
