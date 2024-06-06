@@ -6,7 +6,7 @@ export const processFairPriceClaim = async (currPage: string) => {
   const values = currPage.split('/');
   const orderId = values[values.length - 1];
 
-  const fairPriceOrderIdSelector = `Delivery ID: ORD${ orderId }`;
+  const fairPriceOrderIdSelector = `Delivery ID: ORD${orderId}`;
 
   const orderIdElementExist =
     document.documentElement.textContent ||
@@ -24,16 +24,6 @@ export const processFairPriceClaim = async (currPage: string) => {
     return;
   }
 
-  if (orderCancelElementExist) {
-    alert(`Order has been cancelled, points will not be rewarded`);
-    return;
-  }
-
-  if (!completedElementExist) {
-    alert('The order is still being process...cannot be claimed');
-    return;
-  }
-
   const response = await fetchData('userId123');
   const data = response['userId123'];
 
@@ -45,17 +35,30 @@ export const processFairPriceClaim = async (currPage: string) => {
 
     if (currentOrderIndex >= 0) {
       const currentOrder = fairPriceOrders[currentOrderIndex];
-      if (currentOrder.isClaimed) {
-        alert(`This ${ orderId } id is already claimed!`);
-      } else {
-        fairPriceOrders[currentOrderIndex] = {
-          ...currentOrder,
-          isClaimed: true
-        };
+      if (orderCancelElementExist) {
+        fairPriceOrders.splice(currentOrderIndex, 1);
 
+        console.log('🚀 ~ processFairPriceClaim ~ data:', data);
         await saveData(data, 'userId123');
-        alert(`You have claimed ${ currentOrder.points } HDB Points`);
+        alert(`Order has been cancelled, points will not be rewarded`);
+        return;
       }
+      if (!completedElementExist) {
+        alert('The order is still being process...cannot be claimed');
+        return;
+      }
+
+      if (currentOrder.isClaimed) {
+        alert(`This ${orderId} id is already claimed!`);
+        return;
+      }
+      fairPriceOrders[currentOrderIndex] = {
+        ...currentOrder,
+        isClaimed: true
+      };
+
+      await saveData(data, 'userId123');
+      alert(`You have claimed ${currentOrder.points} HDB Points`);
     }
   }
 };
