@@ -1,4 +1,4 @@
-import { type MerchantPoints, Store } from '../constants';
+import { Store, type MerchantPoints } from '../constants';
 import { isHcsItem } from '../utils/hcs';
 import { MERCHANTS } from '../utils/merchants';
 import { fetchData, saveData } from '../utils/storage';
@@ -32,9 +32,10 @@ const getItemsWithRewards = () => {
 
   elements.forEach(element => {
     if (isHcsItem(element.textContent)) {
-      const productName = element.querySelector(
-        'a[data-testid=cart-product-detail-link] > div > div > span > span:last-child'
-      )?.textContent ?? '';
+      const productName =
+        element.querySelector(
+          'a[data-testid=cart-product-detail-link] > div > div > span > span:last-child'
+        )?.textContent ?? '';
       const quantity = element.querySelector('input')?.value ?? '1';
       products.push({
         productName,
@@ -82,7 +83,7 @@ export const saveRewardsPointToStorage = async () => {
   const orderId = '64278725' || currentUrl.split('/').pop();
   const userId = 'userId123'; // hardcoding user id for demo
   let totalQuantity = 0;
-  products.forEach((product) => {
+  products.forEach(product => {
     totalQuantity += +product.quantity;
   });
 
@@ -90,14 +91,14 @@ export const saveRewardsPointToStorage = async () => {
   const existingData = await fetchData(userId);
   const existingUserMerchantPoints = existingData[userId];
 
-  if(!existingUserMerchantPoints) {
+  if (!existingUserMerchantPoints) {
     // create store for new user
     const emptyState: MerchantPoints = {
       [Store.FAIRPRICE]: [],
       [Store.LAZADA]: [],
       [Store.SHENGSIONG]: [],
       [Store.SHOPEE]: []
-    }
+    };
 
     const data = {
       ...emptyState,
@@ -109,27 +110,38 @@ export const saveRewardsPointToStorage = async () => {
     return;
   }
 
-  const existingStorePointsForTheUser = existingUserMerchantPoints[currentStore];
+  const existingStorePointsForTheUser =
+    existingUserMerchantPoints[currentStore];
 
   // find if orderId already exist
-  const existingTrackingForOrderId = existingStorePointsForTheUser.findIndex((points => {
-    return points.orderId === orderId;
-  }));
+  const existingTrackingForOrderId = existingStorePointsForTheUser.findIndex(
+    points => {
+      return points.orderId === orderId;
+    }
+  );
 
   // to exit if the order has already been tracked (not sure if will ever happen IRL
   if (existingTrackingForOrderId !== -1) {
-    console.log('Current order has already been tracked.', existingStorePointsForTheUser[existingTrackingForOrderId]);
+    console.log(
+      'Current order has already been tracked.',
+      existingStorePointsForTheUser[existingTrackingForOrderId]
+    );
     return;
   }
 
-  await saveData({
-    ...existingUserMerchantPoints,
-    [currentStore]: [...existingStorePointsForTheUser, { orderId, isClaimed: false, points: totalQuantity * 5 }]
-  }, userId);
+  await saveData(
+    {
+      ...existingUserMerchantPoints,
+      [currentStore]: [
+        { orderId, isClaimed: false, points: totalQuantity * 5 },
+        ...existingStorePointsForTheUser
+      ]
+    },
+    userId
+  );
 
   showConfirmationModal();
 };
-
 
 export const showConfirmationModal = () => {
   removeModalIfExists();
@@ -157,14 +169,19 @@ position: fixed;
 box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
 `
   );
+  let totalPoints = 0;
+  products.forEach(product => {
+    totalPoints += +product.quantity * 5;
+  });
 
   modal.innerHTML = `
 <button style="position: absolute; top: 0; right: 5px; padding: 8px 12px; font-size: 16px; border: none; border-radius: 20px; cursor: pointer">x</button>
-<div style="margin-bottom: 16px;">Healthy 365</div>
-<div id="confirmationModalContent" style="display: flex; gap: 16px; flex-direction: column;"></div>
+<h1 style="padding: 0px; margin: 0; text-align: center; font-weight: bold; font-size: 40px;"><img src="https://media.publit.io/file/randomassets/hcs.png" style="height: 36px; margin-right: 8px;"/>${totalPoints}pts</h1>
+<p style="text-align: center; margin: 12px 0;">Healthier Choice points to be claimed upon order confirmation</p>
+<hr />
+<div id="confirmationModalContent" style="display: flex; gap: 8px; flex-direction: column; margin-top:12px; text-align: center"></div>
 `;
 
-  let totalQuantity = 0;
   const contentDom = modal.querySelector('#confirmationModalContent');
 
   if (!contentDom) {
@@ -177,22 +194,15 @@ box-shadow: 0px 12px 48px rgba(29, 5, 64, 0.32);
       'style',
       `
     display: flex;
-    font-size: 12px;
+    font-size: 14px;
     `
     );
 
-    itemDiv.innerText = `${ product.productName } – ${ product.quantity }`;
+    itemDiv.innerText = `${product.quantity} x ${product.productName} (${
+      +product.quantity * 5
+    }pts) `;
     contentDom.append(itemDiv);
-
-    totalQuantity += +product.quantity;
   });
-
-  const totalPointDiv = document.createElement('div');
-
-  totalPointDiv.innerHTML = `Total health points: <span style="font-size: 20px;">${
-    totalQuantity * 5
-  }</span>`;
-  contentDom.append(totalPointDiv);
 
   document.body.appendChild(modal);
   modal.querySelector('button')?.addEventListener('click', () => {

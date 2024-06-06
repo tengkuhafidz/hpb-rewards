@@ -117,30 +117,33 @@ const injectElement = (
 
 const highlightCartItemsAndInjectTotalPoints = () => {
   if (isCartPageReady()) {
+    const cartItemElements: NodeListOf<HTMLElement> = document.querySelectorAll(
+      '[data-testid=cartProduct]'
+    );
+
+    let hasHcsItem = false;
+    if (cartItemElements && cartItemElements.length > 0) {
+      cartItemElements.forEach(itemElement => {
+        if (isHcsItem(itemElement.textContent)) {
+          hasHcsItem = true;
+          injectCartItemRewardInfo(itemElement, 'div > div:nth-child(1)');
+        }
+      });
+    }
+
     const cartTotalContainerElement = document.querySelector(
       '[data-testid=cart-summary-total]'
     );
 
     if (
       cartTotalContainerElement &&
+      hasHcsItem &&
       !hasInjectedElement('[id=total-hpb-reward-text]')
     ) {
       cartTotalContainerElement.parentElement?.insertAdjacentElement(
         'afterend',
         generateTotalHpbRewardTextElement()
       );
-    }
-
-    const cartItemElements: NodeListOf<HTMLElement> = document.querySelectorAll(
-      '[data-testid=cartProduct]'
-    );
-
-    if (cartItemElements && cartItemElements.length > 0) {
-      cartItemElements.forEach(itemElement => {
-        if (isHcsItem(itemElement.textContent)) {
-          injectCartItemRewardInfo(itemElement, 'div > div:nth-child(1)');
-        }
-      });
     }
   }
 };

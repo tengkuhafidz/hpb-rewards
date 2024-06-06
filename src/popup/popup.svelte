@@ -55,13 +55,13 @@
   const mockData: MerchantPoints = {
     [Store.FAIRPRICE]: [
       {
-        orderId: '64278724',
-        points: 10,
+        orderId: '179995252',
+        points: 5,
         isClaimed: false
       },
       {
-        orderId: '179995252',
-        points: 5,
+        orderId: '64278724',
+        points: 10,
         isClaimed: false
       }
     ],
@@ -124,11 +124,12 @@
 </script>
 
 <div style="padding: 10px; height: 50px;">
-  <img src="img/hpb365.png" alt="logo" />
+  <img src="img/hcs.png" alt="logo" />
   <h1
     style="font-size: medium; align-self: center; margin-bottom: 0; margin-left: 10px;"
   >
-    Healthy 365
+  
+    Healthier Choice
   </h1>
 </div>
 
@@ -136,11 +137,6 @@
   <TabContent>
     <!-- STORE TAB -->
     <TabPane tabId={TabId.STORE} tab="Stores">
-      <div
-        style="padding: 10px 0; flex-direction: column; border-bottom: 1px solid #dbdbdb;"
-      >
-        <h6 style="margin-bottom: 0;">Supported stores:</h6>
-      </div>
       <Container>
         <Row cols={1}>
           {#each Object.entries(merchantData) as [{ url, logo }]}

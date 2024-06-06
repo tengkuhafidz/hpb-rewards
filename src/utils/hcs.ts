@@ -6,7 +6,7 @@ export interface HcsItem {
 let items: HcsItem[] = [];
 
 const getHcsItems = () => {
-  if(items.length > 0){
+  if (items.length > 0) {
     return items;
   }
 
@@ -1690,6 +1690,7 @@ const hcsProductNames: string[] = [
   'MILO Hotmix (Activ-go)',
   'MILO Ice RTD',
   'MILO Less Sugar UHT',
+  'MILO',
   'MILO Original',
   'MILO Protein Up RTD',
   'MILO Soy with Almond',
@@ -2232,6 +2233,7 @@ const hcsProductNames: string[] = [
   'Pokka Ice Lemon Tea Less Sugar',
   'Pokka ICE PEACH TEA LESS SUGAR',
   'Pokka ISOPLENISH',
+  'Pokka Green Tea',
   'Pokka Jasmine Green Tea',
   'Pokka JASMINE GREEN TEA NO SUGAR',
   'Pokka KIYO KYOHO GRAPE JUICE DRINK',

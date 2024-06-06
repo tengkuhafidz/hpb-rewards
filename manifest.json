@@ -14,9 +14,7 @@
   "content_scripts": [
     {
       "all_frames": true,
-      "js": [
-        "dist/content.js"
-      ],
+      "js": ["dist/content.js"],
       "matches": [
         "https://www.lazada.sg/*",
         "https://shopee.sg/*",
@@ -28,7 +26,7 @@
 
   "action": {
     "default_popup": "public/popup.html",
-    "default_icon": "public/hpb365.png"
+    "default_icon": "public/img/hcs.png"
   },
 
   "permissions": ["storage", "activeTab", "tabs", "scripting", "webNavigation"],
