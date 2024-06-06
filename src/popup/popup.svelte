@@ -80,12 +80,15 @@
         orderId: '2342',
         points: 10,
         isClaimed: true
-      }],
-    [Store.SHENGSIONG]: [{
+      }
+    ],
+    [Store.SHENGSIONG]: [
+      {
         orderId: '16423',
         points: 1000,
         isClaimed: true
-      }],
+      }
+    ],
     [Store.SHOPEE]: []
   };
 
@@ -97,18 +100,18 @@
       let merchantPendingPts = 0;
       let merchantTotalPts = 0;
 
-    details.forEach((order) => {
-      if(order.isClaimed){
-        totalClaimedPts += order.points;
-        merchantTotalPts += order.points;
-      } else {
-        totalPendingPts += order.points;
-        merchantPendingPts += order.points;
-      }
-      merchantData[key as Store].pendingPts = merchantPendingPts;
-      merchantData[key as Store].totalPts = merchantTotalPts;
-    })
-  });
+      details.forEach(order => {
+        if (order.isClaimed) {
+          totalClaimedPts += order.points;
+          merchantTotalPts += order.points;
+        } else {
+          totalPendingPts += order.points;
+          merchantPendingPts += order.points;
+        }
+        merchantData[key as Store].pendingPts = merchantPendingPts;
+        merchantData[key as Store].totalPts = merchantTotalPts;
+      });
+    });
 
     displayData = Object.entries(merchantData).sort((a, b) => {
       return b[1].pendingPts - a[1].pendingPts || b[1].totalPts - a[1].totalPts;
@@ -116,14 +119,19 @@
   };
 
   function handleOnClaimClick(orderId: string) {
-    window.open(merchantClaimUrl(Store.FAIRPRICE, orderId));
+    const url = merchantClaimUrl(Store.FAIRPRICE, orderId);
+    window.open(url);
   }
 
   async function loadData() {
-    saveData(mockData, 'userId123'); //for testing
+    
     const response = await fetchData('userId123');
     // The key is the property
     data = response['userId123'];
+
+    if(!data){
+      saveData(mockData, 'userId123'); //for testing
+    }
 
     generateDisplayData(data);
   }
@@ -237,10 +245,14 @@
                     <Row
                       style="border-top: 1px solid #dbdbdb; padding: 15px 0;"
                     >
-                      <Col xs="8" style="align-self: center;">
-                        <div>
-                          <div style="flex-direction: column; align-items: center;">
-                            <p style="margin-bottom: 0; font-size: small;">Order ID</p>
+                      <Col xs="8" style="align-self: center">
+                        <div style="margin-bottom: 0;">
+                          <p style="margin-bottom: 0; font-size: small;">
+                            Order ID
+                          </p>
+                          <div
+                            style="margin-left: 5px; height: fit-content; align-self: center;"
+                          >
                             <Badge color="dark">{orderId}</Badge>
                           </div>
                           {#if isClaimed}
