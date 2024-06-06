@@ -21,22 +21,27 @@ browser.runtime.onInstalled.addListener(async () => {
 });
 
 browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (tab.url) {
-    if (tab.url.includes(MERCHANTS.FAIRPRICE)) {
-      browser.tabs.sendMessage(tabId, {
-        type: MERCHANTS.FAIRPRICE
-      });
-    }
-    if (tab.url.includes(MERCHANTS.LAZADA)) {
-      browser.tabs.sendMessage(tabId, {
-        type: MERCHANTS.LAZADA
-      });
-    }
-    if (tab.url.includes(MERCHANTS.SHOPEE)) {
-      browser.tabs.sendMessage(tabId, {
-        type: MERCHANTS.SHOPEE
-      });
-    }
+  if (!tab.url && changeInfo.status !== 'complete') {
+    return;
+  }
+  const currPage = tab.url;
+  if (tab.url.includes(MERCHANTS.FAIRPRICE)) {
+    browser.tabs.sendMessage(tabId, {
+      type: MERCHANTS.FAIRPRICE,
+      currPage,
+    });
+  }
+  if (tab.url.includes(MERCHANTS.LAZADA)) {
+    browser.tabs.sendMessage(tabId, {
+      type: MERCHANTS.LAZADA,
+      currPage,
+    });
+  }
+  if (tab.url.includes(MERCHANTS.SHOPEE)) {
+    browser.tabs.sendMessage(tabId, {
+      type: MERCHANTS.SHOPEE,
+      currPage,
+    });
   }
 });
 

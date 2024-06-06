@@ -27,11 +27,24 @@ export enum TabId {
 }
 
 export interface Points {
-  orderId:string;
-  isClaimed:boolean;
-  points:number;
+  orderId: string;
+  isClaimed: boolean;
+  points: number;
 }
 
 export type MerchantPoints = {
-  [key in Store]:Points[]
+  [key in Store]: Points[]
 }
+
+export type MerchantData = {
+  [key in Store]: MerchantDataObj;
+};
+
+type MerchantDataObj = {
+    logo: string;
+    url: string;
+    pendingPts: number;
+    totalPts: number;
+};
+
+export type DisplayData = [Store, MerchantDataObj][];

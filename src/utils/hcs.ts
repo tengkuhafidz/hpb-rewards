@@ -3,27 +3,26 @@ export interface HcsItem {
   tokens: string[];
 }
 
-let hcsItems: HcsItem[] = [];
+let items: HcsItem[] = [];
 
-export const getHcsItems = () => {
-  if(hcsItems.length > 0){
-    return hcsItems;
+const getHcsItems = () => {
+  if(items.length > 0){
+    return items;
   }
 
-  hcsItems = hcsProductNames.map(item => ({
+  items = hcsProductNames.map(item => ({
     name: item,
     tokens: item.split(' ')
   }));
 
-  return hcsItems;
+  return items;
 };
 
 export const isHcsItem = (itemText: string | null) => {
   if (!itemText) {
     return false;
   }
-  const hcsItems = getHcsItems();
-  return hcsItems.some(item =>
+  return getHcsItems().some(item =>
     item.tokens.every(token =>
       itemText.toLowerCase().includes(token.toLowerCase())
     )
