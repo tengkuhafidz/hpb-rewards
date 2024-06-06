@@ -1,5 +1,6 @@
 import { isHcsItem } from '../../utils/hcs';
 import {
+  generateCartItemRewardInElement,
   generateHcsTagElement,
   generateHpbRewardBoxElement,
   generateTotalHpbRewardTextElement,
@@ -64,7 +65,7 @@ const injectCardsStyling = (borderSelector: string, titleSelector: string) => {
 };
 
 const injectHcsTag = (borderElement: HTMLElement, titleSelector: string) => {
-  if (hasInjectedElement('#hcs-tag')) {
+  if (hasInjectedElement('[id=hcs-tag]')) {
     return;
   }
   injectElement(
@@ -79,13 +80,28 @@ const injectRewardBox = (
   borderElement: HTMLElement,
   buttonDivSelector: string
 ) => {
-  if (hasInjectedElement('#hpb-reward-box')) {
+  if (hasInjectedElement('[id=hpb-reward-box]', borderElement)) {
     return;
   }
   injectElement(
     borderElement,
     buttonDivSelector,
     generateHpbRewardBoxElement(),
+    'afterend'
+  );
+};
+
+const injectCartItemRewardInfo = (
+  borderElement: HTMLElement,
+  buttonDivSelector: string
+) => {
+  if (hasInjectedElement('[id=hpb-reward-box]', borderElement)) {
+    return;
+  }
+  injectElement(
+    borderElement,
+    buttonDivSelector,
+    generateCartItemRewardInElement(),
     'afterend'
   );
 };
@@ -104,16 +120,15 @@ const injectElement = (
 };
 
 const highlightCartItemsAndInjectTotalPoints = () => {
-  const lastToLoadElement = document.querySelector(
-    '[data-testid=cart-summary-subtotal]'
-  );
-
   if (isCartPageReady()) {
     const cartTotalContainerElement = document.querySelector(
       '[data-testid=cart-summary-total]'
     );
 
-    if (cartTotalContainerElement) {
+    if (
+      cartTotalContainerElement &&
+      !hasInjectedElement('[id=total-hpb-reward-text]')
+    ) {
       cartTotalContainerElement.parentElement?.insertAdjacentElement(
         'afterend',
         generateTotalHpbRewardTextElement()
@@ -126,7 +141,7 @@ const highlightCartItemsAndInjectTotalPoints = () => {
     if (listingItemBorderElements && listingItemBorderElements.length > 0) {
       listingItemBorderElements.forEach(borderElement => {
         if (isHcsItem(borderElement.textContent)) {
-          injectRewardBox(borderElement, 'div.sc-b47619a4-6.jsRERq');
+          injectCartItemRewardInfo(borderElement, 'div.sc-b47619a4-6.jsRERq');
         }
       });
     }
@@ -162,7 +177,9 @@ const isCartPageReady = () => {
   return true;
 };
 
-const hasInjectedElement = (id: string) => {
-  const hcsTag = document.querySelector(id);
-  return !!hcsTag;
+const hasInjectedElement = (selector: string, parentElement?: HTMLElement) => {
+  const injectedElements = (parentElement ?? document).querySelectorAll(
+    selector
+  );
+  return injectedElements && injectedElements.length > 0;
 };
