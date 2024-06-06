@@ -121,7 +121,7 @@
   async function loadData() {
     const response = await fetchData('userId123');
     // The key is the property
-    data = response['userId123'];
+    data = response['userId123'] || mockData;
 
     if(!data){
       await saveData(mockData, 'userId123'); //for testing
