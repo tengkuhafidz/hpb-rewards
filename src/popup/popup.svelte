@@ -138,7 +138,7 @@
     <TabPane tabId={TabId.STORE} tab="Stores">
       <Container>
         <Row cols={1}>
-          {#each Object.entries(merchantData) as [{ url, logo }]}
+          {#each Object.values(merchantData) as { url, logo }}
             <Col>
               <div style="margin-top: 10px;">
                 <a href={url} target="_blank">
